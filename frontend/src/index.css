@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand purple scale, anchored on the two given brand hues (300 = #DC95FF, 500 = #8C56D4) */
+  --color-brand-50: #faf5ff;
+  --color-brand-100: #f3e8ff;
+  --color-brand-200: #e9d5ff;
+  --color-brand-300: #dc95ff;
+  --color-brand-400: #b475e9;
+  --color-brand-500: #8c56d4;
+  --color-brand-600: #7440b8;
+  --color-brand-700: #5b2f94;
+  --color-brand-800: #432370;
+  --color-brand-900: #2d174d;
+
+  /* Playful decorative accents from the given palette */
+  --color-accent-pink: #ffbefb;
+  --color-accent-cream: #fff4bf;
+}

@@ -1,0 +1,197 @@
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
+
+const navItemClass = ({ isActive }) =>
+  `group flex items-center px-4 py-3 rounded-md transition-all duration-200 ease-in-out ${
+    isActive
+      ? 'bg-white text-brand-700 font-semibold shadow-md'
+      : 'text-brand-100 hover:bg-white/10 hover:translate-x-1'
+  }`;
+
+const navIconClass = (isActive) =>
+  `w-5 h-5 mr-3 transition-colors duration-200 ${
+    isActive ? 'text-brand-700' : 'text-brand-200 group-hover:text-white'
+  }`;
+
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const { logout, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // Determine user role
+  const isAdmin = user && user.role === 'admin';
+  const isOrganizer = user && user.role === 'organizer';
+  return (
+    <>
+      {/* Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-brand-800 to-brand-600 text-white z-30 transform transition-transform duration-300 ease-in-out shadow-lg ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:z-0`}
+      >
+
+          <div className="flex justify-end">
+            <button
+              className="text-white md:hidden focus:outline-none"
+              onClick={toggleSidebar}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+
+        <nav className="mt-4">
+          <div className="px-4 py-2 text-xs text-brand-200 uppercase font-semibold tracking-wider">Main</div>
+          <ul className="space-y-1">
+            {/* Admin Dashboard - Only visible to admins */}
+            {isAdmin && (
+              <li className="mx-2">
+                <NavLink to="/admindashboard" className={navItemClass}>
+                  {({ isActive }) => (
+                    <>
+                      <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                      </svg>
+                      Admin Dashboard
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            )}
+
+            {/* Organizer Dashboard - Only visible to organizers */}
+            {isOrganizer && (
+              <li className="mx-2">
+                <NavLink to="/organizerdashboard" className={navItemClass}>
+                  {({ isActive }) => (
+                    <>
+                      <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                      </svg>
+                      Organizer Dashboard
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            )}
+
+            {/* Home - Only visible to participants */}
+            {!isAdmin && !isOrganizer && (
+              <li className="mx-2">
+                <NavLink to="/home" className={navItemClass}>
+                  {({ isActive }) => (
+                    <>
+                      <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                      </svg>
+                      Home
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            )}
+            {/* Events - Visible to all users */}
+            <li className="mx-2">
+              <NavLink to="/events" className={navItemClass}>
+                {({ isActive }) => (
+                  <>
+                    <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Events
+                  </>
+                )}
+              </NavLink>
+            </li>
+
+            {/* Leaderboard - Visible to all users */}
+            <li className="mx-2">
+              <NavLink to="/leaderboard" className={navItemClass}>
+                {({ isActive }) => (
+                  <>
+                    <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Leaderboard
+                  </>
+                )}
+              </NavLink>
+            </li>
+
+            {/* Announcements - Visible to all users */}
+            <li className="mx-2">
+              <NavLink to="/announcements" className={navItemClass}>
+                {({ isActive }) => (
+                  <>
+                    <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                    </svg>
+                    Announcements
+                  </>
+                )}
+              </NavLink>
+            </li>
+          </ul>
+
+          <div className="px-4 py-2 mt-4 text-xs text-brand-200 uppercase font-semibold tracking-wider">Account</div>
+          <ul className="space-y-1">
+            <li className="mx-2">
+              <NavLink to="/profile" className={navItemClass}>
+                {({ isActive }) => (
+                  <>
+                    <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Profile
+                  </>
+                )}
+              </NavLink>
+            </li>
+            {/* System Settings - Only visible to admins */}
+            {isAdmin && (
+              <li className="mx-2">
+                <NavLink to="/system-settings" className={navItemClass}>
+                  {({ isActive }) => (
+                    <>
+                      <svg className={navIconClass(isActive)} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                      </svg>
+                      System Settings
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            )}
+            {/* Logout - Hidden in the admin panel; admins use the Header logout button instead */}
+            {!isAdmin && (
+              <li className="mx-2">
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate('/');
+                  }}
+                  className="group flex items-center w-full px-4 py-3 text-left rounded-md transition-all duration-200 ease-in-out text-red-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+                >
+                  <svg className="w-5 h-5 mr-3 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                  </svg>
+                  Logout
+                </button>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </aside>
+    </>
+  );
+};
+
+export default Sidebar;
